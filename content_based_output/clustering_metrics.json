@@ -1,0 +1,15 @@
+{
+  "n_songs": 50683,
+  "n_clusters": 6,
+  "inertia": 392298.1875,
+  "silhouette_sample": 0.1191268446508429,
+  "silhouette_sample_size": 1200,
+  "cluster_sizes": [
+    10492,
+    2114,
+    13661,
+    12172,
+    8824,
+    3420
+  ]
+}
