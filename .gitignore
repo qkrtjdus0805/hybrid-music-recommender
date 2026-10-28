@@ -1,18 +1,19 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+# Python virtual environment
+.venv/
+venv/
 
-# Other files and folders
-.settings/
+# Python cache
+__pycache__/
+*.pyc
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
+# macOS
+.DS_Store
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+# Original datasets
+Music Info.csv
+User Listening History.csv
+User Listening History.csv.zip
+spotify_songs.csv
+
+# Secret environment files
+.env
