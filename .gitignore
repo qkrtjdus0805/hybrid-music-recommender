@@ -17,3 +17,10 @@ spotify_songs.csv
 
 # Secret environment files
 .env
+
+# Generated outputs
+collaborative_output/
+
+# Backup files
+*.bak
+
