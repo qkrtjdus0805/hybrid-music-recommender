@@ -7,7 +7,7 @@
 - **2-1** `r = log(1 + playcount)` 변환
 - **2-2** 행렬 분해: **Implicit ALS (기본값)** 또는 Biased SVD (`--method sgd`, numba가 있으면 자동 가속)
 - **2-3** 사용자별 Min-Max 정규화로 `S_MF(user, track)` ∈ [0,1]; 학습에 없던 곡(Cold-Start)은 0.0
-- **3-2** 평가: Precision@K, Recall@K, NDCG@K (sgd는 RMSE/MAE 추가). 이미 학습에서 들은 곡은 제외
+- **2-4** 평가: precision@k, recall@k, ndcg@k (sgd는 rmse/mae 추가). 이미 학습에서 들은 곡은 제외
 
 ## 준비
 

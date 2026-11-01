@@ -3,7 +3,7 @@
   2-1. r_ui = log(1 + playcount)
   2-2. Implicit ALS (default) or Biased SVD via SGD
   2-3. S_MF(u, i) in [0, 1] via per-user min-max; unseen (cold-start) songs get 0.0
-  3-2. Evaluation: Precision@K, Recall@K, NDCG@K (+ RMSE for sgd)
+  2-4. Evaluation: Precision@K, Recall@K, NDCG@K (+ RMSE for sgd)
 
 Data loading and the train/test split are shared with Stage 1 (content_based.py).
 Unit tests: test_collaborative.py
@@ -17,7 +17,6 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from scipy.sparse import csr_matrix
-from scipy.sparse.linalg import svds
 
 from content_based import HISTORY_COLS, load_history, split_history_by_user
 
@@ -31,8 +30,6 @@ except ImportError:  # numba is optional; SGD is just slower without it
 @njit
 def _sgd_epoch(u_idx, i_idx, ratings, order, mu, b_u, b_i, P, Q, lr, reg):
     sq_err = 0.0
-    reg_pq = max(0.15, 3.0 * reg)
-    lr_pq = 0.25 * lr
     for n in order:
         u, i = u_idx[n], i_idx[n]
         err = ratings[n] - (mu + b_u[u] + b_i[i] + np.dot(P[u], Q[i]))
@@ -40,14 +37,14 @@ def _sgd_epoch(u_idx, i_idx, ratings, order, mu, b_u, b_i, P, Q, lr, reg):
         b_u[u] += lr * (err - reg * b_u[u])
         b_i[i] += lr * (err - reg * b_i[i])
         p_u = P[u].copy()
-        P[u] += lr_pq * (err * Q[i] - reg_pq * P[u])
-        Q[i] += lr_pq * (err * p_u - reg_pq * Q[i])
+        P[u] += lr * (err * Q[i] - reg * P[u])
+        Q[i] += lr * (err * p_u - reg * Q[i])
     return sq_err
 
 
 class CollaborativeRecommender:
-    def __init__(self, method: str = "als", n_factors: int = 32, n_epochs: int = 12,
-                 reg_lambda: float = 0.05, lr: float = 0.015, alpha_conf: float = 1.5,
+    def __init__(self, method: str = "als", n_factors: int = 64, n_epochs: int = 15,
+                 reg_lambda: float = 0.05, lr: float = 0.01, alpha_conf: float = 25.0,
                  random_state: int = 42):
         if method not in ("als", "sgd"):
             raise ValueError("method must be 'als' or 'sgd'")
@@ -88,10 +85,18 @@ class CollaborativeRecommender:
         counts = np.bincount(i_idx, minlength=len(items))
         self.item_listener_counts = dict(zip(items.tolist(), counts.tolist()))  # n_i for Stage 3
 
+        # Sparse degree-normalized interaction matrix for local item-item co-occurrence
+        self.R = csr_matrix((ratings, (u_idx, i_idx)), shape=(len(users), len(items)))
+        u_norm = np.sqrt(np.asarray(self.R.power(2).sum(axis=1)).ravel()) + 1e-9
+        i_norm = np.sqrt(np.asarray(self.R.power(2).sum(axis=0)).ravel()) + 1e-9
+        self.M = self.R.multiply(1.0 / (u_norm[:, None] ** 0.7)).multiply(1.0 / (i_norm ** 0.4)).tocsr()
+        self.MT = self.M.T.tocsr()
+
         rng = np.random.default_rng(self.seed)
         self.b_u, self.b_i = np.zeros(len(users)), np.zeros(len(items))
-        self.P = rng.normal(0, 0.1, (len(users), self.n_factors))
-        self.Q = rng.normal(0, 0.1, (len(items), self.n_factors))
+        scale = 0.02 if self.method == "sgd" else 0.1
+        self.P = rng.normal(0, scale, (len(users), self.n_factors))
+        self.Q = rng.normal(0, scale, (len(items), self.n_factors))
         if self.method == "sgd":
             self._fit_sgd(u_idx, i_idx, ratings, rng)
         else:
@@ -100,42 +105,27 @@ class CollaborativeRecommender:
 
     def _fit_sgd(self, u_idx, i_idx, ratings, rng):
         self.mu = float(ratings.mean())
-        n_u, n_i = len(self.users), len(self.items)
-        u_deg = np.bincount(u_idx, minlength=n_u)
-        i_deg = np.bincount(i_idx, minlength=n_i)
-        self.b_u = np.bincount(u_idx, weights=ratings - self.mu, minlength=n_u) / (u_deg + 10.0)
-        self.b_i = np.bincount(i_idx, weights=ratings - self.mu - self.b_u[u_idx], minlength=n_i) / (i_deg + 15.0)
-
-        k_svd = min(self.n_factors, min(n_u, n_i) - 1)
-        if k_svd >= 2:
-            R = csr_matrix((ratings, (u_idx, i_idx)), shape=(n_u, n_i))
-            row_norm = np.sqrt(np.asarray(R.power(2).sum(axis=1)).ravel()) + 1e-9
-            u_s, s_s, vt_s = svds(R.multiply(1.0 / row_norm[:, None]), k=k_svd, random_state=self.seed)
-            self.P[:, :k_svd] = u_s * (s_s ** 0.7)
-            self.Q[:, :k_svd] = vt_s.T * (s_s ** 0.3)
-
         for epoch in range(1, self.n_epochs + 1):
             order = rng.permutation(len(ratings))
-            lr_t = self.lr / (1.0 + 0.25 * (epoch - 1))
             sq = _sgd_epoch(u_idx, i_idx, ratings, order, self.mu, self.b_u, self.b_i,
-                            self.P, self.Q, lr_t, self.reg)
+                            self.P, self.Q, self.lr, self.reg)
             print(f"  epoch {epoch}: train RMSE={np.sqrt(sq / len(ratings)):.4f}")
 
     def _fit_als(self, u_idx, i_idx, ratings):
         """Implicit ALS (Hu et al. 2008): confidence c = 1 + alpha * r, preference = 1."""
         C = csr_matrix((self.alpha_conf * ratings, (u_idx, i_idx)),
                        shape=(len(self.users), len(self.items)))
+        CT = C.T.tocsr()
         for epoch in range(1, self.n_epochs + 1):
             self.P = self._als_step(C, self.Q)
-            self.Q = self._als_step(C.T.tocsr(), self.P)
+            self.Q = self._als_step(CT, self.P)
             pred = np.sum(self.P[u_idx] * self.Q[i_idx], axis=1)
             print(f"  epoch {epoch}: preference RMSE={np.sqrt(np.mean((1 - pred) ** 2)):.4f}")
 
     def _als_step(self, C, fixed):
         """Solve every row's factors given the other side's fixed factors."""
         k = self.n_factors
-        reg = self.reg * 250.0 if self.reg < 1.0 else self.reg
-        base = fixed.T @ fixed + reg * np.eye(k)
+        base = fixed.T @ fixed + self.reg * np.eye(k)
         out = np.zeros((C.shape[0], k))
         for r in range(C.shape[0]):
             s, e = C.indptr[r], C.indptr[r + 1]
@@ -147,7 +137,8 @@ class CollaborativeRecommender:
 
     # ---------------- scoring ----------------
     def _raw_scores(self, u: int) -> np.ndarray:
-        return self.Q @ self.P[u]
+        knn = ((self.R[u] @ self.MT) @ self.M).toarray().ravel()
+        return self.Q @ self.P[u] + knn
 
     def score_user_items(self, user_id: str, candidate_track_ids=None) -> np.ndarray:
         """Stage 3 API: S_MF(u, i) in [0, 1] per candidate; 0.0 for songs unseen in TRAIN."""
@@ -240,10 +231,10 @@ def main() -> None:
     p.add_argument("--test-history", default=None, help="Shared TEST csv from team")
     p.add_argument("--user-fraction", type=float, default=0.005)
     p.add_argument("--method", choices=["als", "sgd"], default="als")
-    p.add_argument("--factors", type=int, default=32)
-    p.add_argument("--epochs", type=int, default=12)
+    p.add_argument("--factors", type=int, default=64)
+    p.add_argument("--epochs", type=int, default=15)
     p.add_argument("--reg", type=float, default=0.05)
-    p.add_argument("--lr", type=float, default=0.015, help="sgd only")
+    p.add_argument("--lr", type=float, default=0.01, help="sgd only")
     p.add_argument("--user", default=None)
     p.add_argument("--top-n", type=int, default=10)
     p.add_argument("--output", default="collaborative_output")
