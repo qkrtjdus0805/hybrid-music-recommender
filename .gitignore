@@ -35,6 +35,9 @@ hybrid_output/*
 !hybrid_output/artist_mf/
 !hybrid_output/artist_mf_gamma/
 !hybrid_output/artist_cap/
+!hybrid_output/feature_mf/
+!hybrid_output/unknown_artist/
+!hybrid_output/final_20pct/
 shared_*_history.csv
 
 # Audio samples (not used by the models)

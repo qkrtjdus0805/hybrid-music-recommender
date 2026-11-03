@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 
 from artist_cap_experiment import cap_top_k, choose_cap, evaluate_capped, run_cap_experiment
-from final_model import build_final_model
+from final_model import _ranked_prefix, build_final_model
 from hybrid import evaluate_hybrid, mask_mock_cold, top_k_indices
 from test_hybrid import make_fixture
 
@@ -49,6 +49,68 @@ class CapTests(unittest.TestCase):
         codes = np.arange(5)
         seen = np.array([True, False, False, False, False])
         self.assertEqual(cap_top_k(SCORES, IDS, seen, codes, 1, 2).tolist(), [1, 2])
+
+
+def full_sort_cap(scores, ids, exclude, codes, cap, k):
+    """The plain definition: sort every song, then walk down the list."""
+    order = np.lexsort((ids, -scores))
+    picked, skipped, used = [], [], {}
+    for position in order[~exclude[order]]:
+        code = codes[position]
+        if code >= 0 and used.get(code, 0) >= cap:
+            skipped.append(position)
+            continue
+        used[code] = used.get(code, 0) + 1
+        picked.append(position)
+        if len(picked) == k:
+            break
+    return picked + skipped[:k - len(picked)]
+
+
+class RankedPrefixTests(unittest.TestCase):
+    def test_prefix_matches_the_start_of_a_full_sort(self):
+        rng = np.random.default_rng(0)
+        ids = np.array([f"T{i:05d}" for i in rng.permutation(5000)])
+        scores = rng.integers(0, 40, 5000) / 40  # many ties, so the id order decides
+        exclude = rng.random(5000) < 0.2
+        order = np.lexsort((ids, -scores))
+        order = order[~exclude[order]]
+        prefix = _ranked_prefix(scores, ids, exclude, 100)
+        self.assertGreaterEqual(len(prefix), 100)
+        np.testing.assert_array_equal(prefix, order[:len(prefix)])
+
+    def test_prefix_is_short_when_scores_are_distinct(self):
+        rng = np.random.default_rng(1)
+        ids = np.array([f"T{i:05d}" for i in range(5000)])
+        prefix = _ranked_prefix(rng.random(5000), ids, np.zeros(5000, dtype=bool), 100)
+        self.assertEqual(len(prefix), 100)
+
+    def test_size_beyond_the_catalog_returns_every_allowed_song(self):
+        ids = np.array(["a", "b", "c"])
+        exclude = np.array([False, True, False])
+        self.assertEqual(_ranked_prefix(np.array([0.1, 0.9, 0.5]), ids, exclude, 10).tolist(), [2, 0])
+
+    def test_nothing_allowed_returns_an_empty_prefix(self):
+        ids = np.array(["a", "b"])
+        self.assertEqual(len(_ranked_prefix(np.array([0.1, 0.9]), ids, np.ones(2, dtype=bool), 5)), 0)
+
+    def test_cap_top_k_matches_the_full_sort_definition(self):
+        rng = np.random.default_rng(2)
+        for n_artists, cap, k in ((2, 5, 20), (3, 1, 10), (400, 5, 10), (1, 5, 20)):  # few artists force the fallback
+            ids = np.array([f"T{i:05d}" for i in rng.permutation(3000)])
+            scores = rng.integers(0, 30, 3000) / 30
+            exclude = rng.random(3000) < 0.1
+            codes = rng.integers(-1, n_artists, 3000)
+            self.assertEqual(cap_top_k(scores, ids, exclude, codes, cap, k).tolist(),
+                             [int(p) for p in full_sort_cap(scores, ids, exclude, codes, cap, k)])
+
+    def test_one_dominant_artist_needs_more_than_the_first_prefix(self):
+        ids = np.array([f"T{i:05d}" for i in range(3000)])
+        scores = np.linspace(1, 0, 3000)
+        codes = np.zeros(3000, dtype=int)
+        codes[-10:] = np.arange(1, 11)  # the only other artists sit at the very bottom
+        result = cap_top_k(scores, ids, np.zeros(3000, dtype=bool), codes, 2, 10)
+        self.assertEqual(result.tolist(), [0, 1] + list(range(2990, 2998)))
 
 
 class ChooseCapTests(unittest.TestCase):
@@ -98,7 +160,7 @@ class EvaluationTests(unittest.TestCase):
 
     def test_per_user_table_aligns_across_caps(self):
         self.assertEqual(list(self.per_user["none"].index), list(self.per_user["1"].index))
-        self.assertEqual(list(self.per_user["none"].columns), ["ndcg10", "mock_recall20"])
+        self.assertEqual(list(self.per_user["none"].columns), ["ndcg10", "mock_recall20", "unknown_recall20"])
 
 
 class ExperimentTests(unittest.TestCase):

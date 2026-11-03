@@ -1,0 +1,11 @@
+,audio,audio_tags
+holdout_r2,0.009529379151895698,0.07490822365462421
+n_answers,4987.0,4987.0
+n_users,4496.0,4496.0
+percentile_among_new_predicted,0.6241663817532299,0.7165914350933531
+percentile_among_new_shuffled,0.4876235526517627,0.5048430956458014
+percentile_among_new_s_cb,0.5961234942264757,0.5961234942264757
+percentile_catalogue_s_hybrid,0.5756067387187034,0.5957581873951927
+median_best_rank,19336.5,18006.0
+share_users_in_top20,0.0,0.0
+share_users_in_top200,0.0,0.0

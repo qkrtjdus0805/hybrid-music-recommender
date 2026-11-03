@@ -143,6 +143,18 @@ class ArtistMF:
         return scores
 
 
+CAP_PREFIX = 1000  # songs sorted first by cap_top_k; sorting the whole catalog per user dominated evaluation time
+
+
+def _ranked_prefix(scores: np.ndarray, track_ids: np.ndarray, exclude: np.ndarray, size: int) -> np.ndarray:
+    """The start of the full ranking (score, then id): at least `size` allowed songs, plus any tied with the last."""
+    allowed = np.flatnonzero(~exclude)
+    if len(allowed) > size:
+        values = scores[allowed]
+        allowed = allowed[values >= np.partition(values, len(values) - size)[len(values) - size]]
+    return allowed[np.lexsort((track_ids[allowed], -scores[allowed]))]
+
+
 def cap_top_k(scores: np.ndarray, track_ids: np.ndarray, exclude: np.ndarray, artist_codes: np.ndarray,
               cap: int | None, k: int) -> np.ndarray:
     """Best-first positions of k songs with at most cap per artist; songs with no artist are not limited.
@@ -151,17 +163,18 @@ def cap_top_k(scores: np.ndarray, track_ids: np.ndarray, exclude: np.ndarray, ar
     """
     if cap is None:
         return top_k_indices(scores, track_ids, exclude, k)
-    order = np.lexsort((track_ids, -scores))
-    order = order[~exclude[order]]
-    used = collections.Counter()
-    picked, skipped = [], []
-    for position in order:
-        code = artist_codes[position]
-        if code >= 0 and used[code] >= cap:
-            skipped.append(position)
-            continue
-        used[code] += 1
-        picked.append(position)
+    for size in (CAP_PREFIX, int((~exclude).sum())):  # the short list almost always fills k; else use every song
+        used = collections.Counter()
+        picked, skipped = [], []
+        for position in _ranked_prefix(scores, track_ids, exclude, size):
+            code = artist_codes[position]
+            if code >= 0 and used[code] >= cap:
+                skipped.append(position)
+                continue
+            used[code] += 1
+            picked.append(position)
+            if len(picked) == k:
+                break
         if len(picked) == k:
             break
     picked.extend(skipped[:k - len(picked)])
@@ -268,8 +281,11 @@ def evaluate_capped(model, test: pd.DataFrame, cold: np.ndarray, caps=(None, FIN
                 box["known"].append(len(head & new_known) / len(new_known))
             if new - new_known:
                 box["unknown"].append(len(head & (new - new_known)) / len(new - new_known))
+            new_unknown = new - new_known
             box["per_user"][user] = {"ndcg10": metrics["ndcg"],
-                                     "mock_recall20": len(head & new) / len(new) if new else np.nan}
+                                     "mock_recall20": len(head & new) / len(new) if new else np.nan,
+                                     "unknown_recall20": len(head & new_unknown) / len(new_unknown) if new_unknown
+                                     else np.nan}
 
     rows, per_user = {}, {}
     for label, box in store.items():
@@ -289,7 +305,8 @@ def evaluate_capped(model, test: pd.DataFrame, cold: np.ndarray, caps=(None, FIN
             "recall20_known_artist": float(np.mean(box["known"])) if box["known"] else None,
             "recall20_unknown_artist": float(np.mean(box["unknown"])) if box["unknown"] else None,
         }
-        per_user[label] = pd.DataFrame.from_dict(box["per_user"], orient="index", columns=["ndcg10", "mock_recall20"])
+        per_user[label] = pd.DataFrame.from_dict(box["per_user"], orient="index",
+                                                 columns=["ndcg10", "mock_recall20", "unknown_recall20"])
     return rows, per_user
 
 
