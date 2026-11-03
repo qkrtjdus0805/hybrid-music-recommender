@@ -1,0 +1,209 @@
+{
+  "selected": {
+    "scaler": "standard",
+    "beta": 0.9
+  },
+  "selection_metric": "validation new-song Recall@20, ties by percentile",
+  "validation": {
+    "standard|beta=0.0": {
+      "recall": 0.0015,
+      "percentile": 0.6428290612456945,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.0031512605042016808,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "standard|beta=0.1": {
+      "recall": 0.036,
+      "percentile": 0.6842938600044086,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.07878151260504201,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "standard|beta=0.3": {
+      "recall": 0.114,
+      "percentile": 0.7410015575883342,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.2426470588235294,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "standard|beta=0.5": {
+      "recall": 0.1305,
+      "percentile": 0.7681721636943698,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.27836134453781514,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "standard|beta=0.7": {
+      "recall": 0.133,
+      "percentile": 0.7810585371314634,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.28361344537815125,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "standard|beta=0.9": {
+      "recall": 0.1355,
+      "percentile": 0.783911568393996,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.28886554621848737,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "categorical_onehot|beta=0.0": {
+      "recall": 0.003,
+      "percentile": 0.645016061161788,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.004201680672268907,
+      "recall_unknown_artist": 0.0018450184501845018,
+      "n_users": 1000
+    },
+    "categorical_onehot|beta=0.1": {
+      "recall": 0.06,
+      "percentile": 0.695950477126546,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.12710084033613445,
+      "recall_unknown_artist": 0.0018450184501845018,
+      "n_users": 1000
+    },
+    "categorical_onehot|beta=0.3": {
+      "recall": 0.114,
+      "percentile": 0.7539349372295928,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.24474789915966386,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "categorical_onehot|beta=0.5": {
+      "recall": 0.1255,
+      "percentile": 0.7757307650263973,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.2689075630252101,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "categorical_onehot|beta=0.7": {
+      "recall": 0.126,
+      "percentile": 0.7843921114727458,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.2699579831932773,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "categorical_onehot|beta=0.9": {
+      "recall": 0.127,
+      "percentile": 0.7859238558056609,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.27205882352941174,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "minmax|beta=0.0": {
+      "recall": 0.0035,
+      "percentile": 0.6027542207198444,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.007352941176470588,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "minmax|beta=0.1": {
+      "recall": 0.1195,
+      "percentile": 0.7381415755243281,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.2542016806722689,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "minmax|beta=0.3": {
+      "recall": 0.1225,
+      "percentile": 0.7688576831902242,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.2605042016806723,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "minmax|beta=0.5": {
+      "recall": 0.122,
+      "percentile": 0.7717263838565802,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.2605042016806723,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "minmax|beta=0.7": {
+      "recall": 0.122,
+      "percentile": 0.7718868023264409,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.2605042016806723,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    },
+    "minmax|beta=0.9": {
+      "recall": 0.122,
+      "percentile": 0.7718866080741458,
+      "known_artist_answer_share": 0.4720670391061452,
+      "recall_known_artist": 0.2605042016806723,
+      "recall_unknown_artist": 0.0,
+      "n_users": 1000
+    }
+  },
+  "test": {
+    "baseline": {
+      "cb_ndcg10": 0.0010516154334490836,
+      "cb_recall10": 0.0012027777777777777,
+      "cb_mock_percentile": 0.6432766337219976,
+      "cb_mock_recall20": 0.0,
+      "hybrid_ndcg10": 0.015757965097108015,
+      "hybrid_recall10": 0.015865098870427818,
+      "hybrid_mock_recall20": 0.0,
+      "hybrid_cold_share": 0.9708000000000001,
+      "fixed_ndcg10": 0.183519883032279,
+      "fixed_recall10": 0.21580583664014005,
+      "fixed_mock_recall20": 0.0,
+      "fixed_cold_share": 0.0,
+      "percentile_all": 0.6370945886463695,
+      "percentile_cold_pool": 0.6356291600282543,
+      "shuffled_percentile_all": 0.5159922154715568,
+      "shuffled_percentile_cold_pool": 0.5144844191612925,
+      "n_users": 2000,
+      "topk_recall20": 0.00125,
+      "topk_percentile": 0.6370945886463695,
+      "known_artist_answer_share": 0.48036493454978185,
+      "recall_known_artist": 0.00254323499491353,
+      "recall_unknown_artist": 0.0
+    },
+    "selected": {
+      "cb_ndcg10": 0.05883419657519615,
+      "cb_recall10": 0.08534725957479053,
+      "cb_mock_percentile": 0.7809927494655152,
+      "cb_mock_recall20": 0.14638447971781304,
+      "hybrid_ndcg10": 0.07228890888987766,
+      "hybrid_recall10": 0.08717261655698963,
+      "hybrid_mock_recall20": 0.18112874779541446,
+      "hybrid_cold_share": 0.8208000000000001,
+      "fixed_ndcg10": 0.19295612509031562,
+      "fixed_recall10": 0.22662695947682385,
+      "fixed_mock_recall20": 0.006172839506172839,
+      "fixed_cold_share": 0.006199999999999999,
+      "percentile_all": 0.7686232109319364,
+      "percentile_cold_pool": 0.767853507226173,
+      "shuffled_percentile_all": 0.5179925947979239,
+      "shuffled_percentile_cold_pool": 0.5166960556269123,
+      "n_users": 2000,
+      "topk_recall20": 0.14963809523809524,
+      "topk_percentile": 0.7686232109319364,
+      "known_artist_answer_share": 0.48036493454978185,
+      "recall_known_artist": 0.32348253645303493,
+      "recall_unknown_artist": 0.0
+    }
+  },
+  "seed": 42,
+  "fixed_alpha": 0.25,
+  "n_mock_cold": 2085,
+  "n_train_rows": 303364,
+  "n_test_rows": 97181,
+  "mock_cold_duplicate_share": 0.0019184652278177458
+}

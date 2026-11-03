@@ -24,3 +24,18 @@ collaborative_output/
 # Backup files
 *.bak
 
+
+# Stage 3 hybrid outputs and shared splits
+hybrid_output/*
+!hybrid_output/figures/
+!hybrid_output/final/
+!hybrid_output/rank/
+!hybrid_output/scaler/
+!hybrid_output/artist/
+!hybrid_output/artist_mf/
+!hybrid_output/artist_mf_gamma/
+!hybrid_output/artist_cap/
+shared_*_history.csv
+
+# Audio samples (not used by the models)
+MP3-Example/
