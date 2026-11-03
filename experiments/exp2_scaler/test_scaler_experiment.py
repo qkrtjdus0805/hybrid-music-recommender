@@ -1,5 +1,5 @@
 """Checks for the CB scaler experiment. No real data needed.
-Run: python -m unittest test_scaler_experiment.py -v
+Run: python -m unittest experiments.exp2_scaler.test_scaler_experiment -v
 """
 import contextlib
 import io
@@ -10,7 +10,7 @@ import pandas as pd
 
 from content_based import AUDIO_FEATURE_COLS, ContentBasedRecommender
 from hybrid import mask_mock_cold
-from scaler_experiment import SCALERS, build_scaler, cold_diagnostics, make_cb, run_experiment
+from experiments.exp2_scaler.scaler_experiment import SCALERS, build_scaler, cold_diagnostics, make_cb, run_experiment
 from test_hybrid import make_fixture
 
 SMALL_CF = {"n_factors": 8, "n_epochs": 3}

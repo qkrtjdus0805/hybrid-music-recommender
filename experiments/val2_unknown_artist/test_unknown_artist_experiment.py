@@ -1,5 +1,5 @@
 """Checks for evaluating recommendations among artists the user has never heard. No real data needed.
-Run: python -m unittest test_unknown_artist_experiment.py -v
+Run: python -m unittest experiments.val2_unknown_artist.test_unknown_artist_experiment -v
 """
 import contextlib
 import io
@@ -12,7 +12,7 @@ import pandas as pd
 from final_model import paired_bootstrap
 from hybrid import assign_buckets
 from test_hybrid import make_fixture
-from unknown_artist_experiment import evaluate_unknown, run_unknown_artist_experiment, unknown_candidates
+from experiments.val2_unknown_artist.unknown_artist_experiment import evaluate_unknown, run_unknown_artist_experiment, unknown_candidates
 
 SMALL_CF = {"n_factors": 8, "n_epochs": 3}
 IDS = np.array(["a", "b", "c", "d", "e", "f"])

@@ -7,7 +7,7 @@ The cap is chosen on validation before TEST is read: the tightest cap whose NDCG
 are both at least 90% of the uncapped list. If none qualifies, the list stays uncapped.
 
 Run:
-  python artist_cap_experiment.py --music "Music Info.csv" \
+  python -m experiments.exp5_artist_cap.artist_cap_experiment --music "Music Info.csv" \
       --train-history shared_train_history.csv --test-history shared_test_history.csv
 """
 from __future__ import annotations

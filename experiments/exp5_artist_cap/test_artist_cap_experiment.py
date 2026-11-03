@@ -1,5 +1,5 @@
 """Checks for limiting how many songs one artist can place in a list. No real data needed.
-Run: python -m unittest test_artist_cap_experiment.py -v
+Run: python -m unittest experiments.exp5_artist_cap.test_artist_cap_experiment -v
 """
 import contextlib
 import io
@@ -7,7 +7,7 @@ import unittest
 
 import numpy as np
 
-from artist_cap_experiment import cap_top_k, choose_cap, evaluate_capped, run_cap_experiment
+from experiments.exp5_artist_cap.artist_cap_experiment import cap_top_k, choose_cap, evaluate_capped, run_cap_experiment
 from final_model import _ranked_prefix, build_final_model
 from hybrid import evaluate_hybrid, mask_mock_cold, top_k_indices
 from test_hybrid import make_fixture

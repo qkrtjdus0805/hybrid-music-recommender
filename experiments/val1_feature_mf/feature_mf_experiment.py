@@ -12,7 +12,7 @@ Each feature set's setting is chosen on validation before TEST is read: among se
 If none qualifies, the current final model stays; the best setting is still reported for reference.
 
 Run:
-  python feature_mf_experiment.py --music "Music Info.csv" \
+  python -m experiments.val1_feature_mf.feature_mf_experiment --music "Music Info.csv" \
       --train-history shared_train_history.csv --test-history shared_test_history.csv
 """
 from __future__ import annotations
@@ -31,7 +31,7 @@ from content_based import AUDIO_FEATURE_COLS, load_history, split_history_by_use
 from final_model import (FINAL_BETA, FINAL_CAP, FINAL_GAMMA, N_CLUSTERS, ArtistAffinity, ArtistCB, ArtistMF,
                          FinalRecommender, _ListenerCounts, evaluate_capped, paired_bootstrap)
 from hybrid import mask_mock_cold
-from scaler_experiment import _CachedMF, make_cb
+from experiments.exp2_scaler.scaler_experiment import _CachedMF, make_cb
 
 FEATURE_SETS = ("audio", "audio_tags")
 BETAS = (0.0, 0.5, 0.9)

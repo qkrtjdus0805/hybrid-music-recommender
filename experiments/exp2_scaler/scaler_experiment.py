@@ -4,7 +4,7 @@ content_based.py stays unchanged: each variant swaps the public `scaler` attribu
 The scaler is chosen on validation data; TEST is only read to report results.
 
 Run:
-  python scaler_experiment.py --music "Music Info.csv" \
+  python -m experiments.exp2_scaler.scaler_experiment --music "Music Info.csv" \
       --train-history shared_train_history.csv --test-history shared_test_history.csv
 """
 from __future__ import annotations

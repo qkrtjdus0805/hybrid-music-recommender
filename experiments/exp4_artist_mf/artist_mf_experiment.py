@@ -10,7 +10,7 @@ Settings are chosen on validation before TEST is read: among settings whose NDCG
 "fixed alpha + artist", take the highest new-song Recall@20. If none qualifies, take the best NDCG@10.
 
 Run:
-  python artist_mf_experiment.py --music "Music Info.csv" \
+  python -m experiments.exp4_artist_mf.artist_mf_experiment --music "Music Info.csv" \
       --train-history shared_train_history.csv --test-history shared_test_history.csv
 """
 from __future__ import annotations
@@ -22,12 +22,12 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from artist_experiment import mock_topk
+from experiments.exp3_artist.artist_experiment import mock_topk
 from collaborative import CollaborativeRecommender
 from content_based import load_history, split_history_by_user
 from final_model import ArtistAffinity, ArtistCB, ArtistMF, paired_bootstrap, per_user_metrics
 from hybrid import HybridRecommender, evaluate_hybrid, mask_mock_cold
-from scaler_experiment import FIXED_ALPHA, _CachedMF, make_cb
+from experiments.exp2_scaler.scaler_experiment import FIXED_ALPHA, _CachedMF, make_cb
 
 BETAS = (0.0, 0.5, 0.9)
 GAMMAS = (0.0, 0.1, 0.25, 0.5, 1.0)

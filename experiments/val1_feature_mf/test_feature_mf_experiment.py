@@ -1,5 +1,5 @@
 """Checks for predicting a new song's MF vector from its music features. No real data needed.
-Run: python -m unittest test_feature_mf_experiment.py -v
+Run: python -m unittest experiments.val1_feature_mf.test_feature_mf_experiment -v
 """
 import contextlib
 import io
@@ -10,7 +10,7 @@ import numpy as np
 
 from collaborative import CollaborativeRecommender
 from content_based import AUDIO_FEATURE_COLS, ContentBasedRecommender
-from feature_mf_experiment import (FeatureMF, choose_feature_config, feature_matrix, fit_feature_regression,
+from experiments.val1_feature_mf.feature_mf_experiment import (FeatureMF, choose_feature_config, feature_matrix, fit_feature_regression,
                                    run_feature_mf_experiment)
 from final_model import ArtistAffinity, ArtistCB, FinalRecommender
 from hybrid import mask_mock_cold

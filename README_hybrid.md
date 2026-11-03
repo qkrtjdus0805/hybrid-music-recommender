@@ -87,7 +87,7 @@ S_Hybrid(u, i) = α(i)·S_CB(u, i) + (1 − α(i))·S_MF(u, i)
 
 **결론:** 가설은 기각되었습니다. 보정하면 오히려 나빠지고, 검증에서도 보정 없음이 선택되었습니다. CB가 모의 신곡 정답을 평균 약 1.8만 등(백분위 0.643)에 두어 Top-20에 들지 못한다는 점이 드러나, CB의 신호를 강화하는 쪽으로 방향을 바꿨습니다.
 
-### 실험 2. 스케일러 교체 (`scaler_experiment.py`)
+### 실험 2. 스케일러 교체 (`experiments/exp2_scaler/scaler_experiment.py`)
 
 **가설:** StandardScaler가 일부 특징에 맞지 않는다. `key`, `mode`, `time_signature`는 값이 12, 2, 5종류뿐이고, `speechiness`(왜도 3.86), `liveness`(2.03), `loudness`(−1.70), `acousticness`(1.32), `instrumentalness`(1.14)는 분포가 치우쳐 있습니다.
 
@@ -116,7 +116,7 @@ S_Hybrid(u, i) = α(i)·S_CB(u, i) + (1 − α(i))·S_MF(u, i)
 
 정확도를 지킨 설정은 신곡을 찾지 못했고, 신곡을 올린 설정은 정확도가 무너졌습니다. 음향 특징과 태그만으로는 프로젝트 목표를 달성하기 어렵다고 판단해, 새로운 특징을 찾기로 했습니다.
 
-### 실험 3. 아티스트 선호도 추가 (`artist_experiment.py`)
+### 실험 3. 아티스트 선호도 추가 (`experiments/exp3_artist/artist_experiment.py`)
 
 **가설:** 음악 취향에서는 아티스트가 음향 유사도보다 강한 신호다. 기존 CB에는 아티스트가 빠져 있으므로, 새로운 특징으로 추가합니다.
 
@@ -139,7 +139,7 @@ A = 사용자의 아티스트별 log(1 + 재생 횟수) 합 / 그 사용자의 �
 
 **결론:** 처음으로 모의 신곡을 찾았습니다. 그러나 동적 α는 쏠림이 남아 정확도가 낮고, 고정 α는 신곡이 거의 나오지 않습니다. 신곡의 `S_MF`가 0이라는 근본 원인을 해결해야 합니다.
 
-### 실험 4. 아티스트로 신곡의 S_MF 추정 (`artist_mf_experiment.py`)
+### 실험 4. 아티스트로 신곡의 S_MF 추정 (`experiments/exp4_artist_mf/artist_mf_experiment.py`)
 
 **가설:** 신곡도 MF 점수를 가지면 같은 순위에서 공정하게 경쟁한다.
 
@@ -166,7 +166,7 @@ S_MF(u, 신곡) = 같은 아티스트의 학습 곡 S_MF 평균
 
 ![γ에 따른 이력 0인 곡 비율과 NDCG@10](hybrid_output/figures/tradeoff_curve.png)
 
-### 실험 5. 아티스트당 곡 수 제한 (`artist_cap_experiment.py`)
+### 실험 5. 아티스트당 곡 수 제한 (`experiments/exp5_artist_cap/artist_cap_experiment.py`)
 
 **가설:** 점수를 바꾸지 않고 목록만 조정해도 아티스트 쏠림을 줄일 수 있다. Top-20에는 제한의 2배를 적용합니다.
 
@@ -229,7 +229,7 @@ S_Hybrid = α(i) × S_CB' + (1 − α(i)) × S_MF
 
 최종 모델을 정한 뒤, 아티스트에 의존하는 한계와 표본 크기의 영향을 확인했습니다. 이 장의 결과로 최종 모델을 바꾸지는 않았습니다.
 
-### 검증 1. 음악 특징으로 신곡의 MF 벡터 예측 (`feature_mf_experiment.py`)
+### 검증 1. 음악 특징으로 신곡의 MF 벡터 예측 (`experiments/val1_feature_mf/feature_mf_experiment.py`)
 
 **가설:** 아티스트 평균 대신 음악 특징으로 곡 벡터를 예측하면, 들어 보지 않은 아티스트의 신곡도 찾을 수 있다.
 
@@ -257,7 +257,7 @@ S_MF(u, 신곡) = p_u · q_신곡                 사용자의 안 들은 학습
 
 β를 함께 바꾼 비교이므로 NDCG@10 상승을 음악 특징의 효과로 볼 수 없습니다. 아티스트 항을 완전히 끈 `β=0`은 검증 NDCG@10이 0.0256(최종 모델 0.0856)으로 크게 떨어졌습니다.
 
-**음악 특징의 신호 진단 (`feature_signal_diagnostic.py`).** 들어 보지 않은 아티스트의 신곡 정답 4,987개(사용자 4,496명)의 평균 순위 위치입니다. 0.5가 무작위 수준입니다.
+**음악 특징의 신호 진단 (`experiments/val1_feature_mf/feature_signal_diagnostic.py`).** 들어 보지 않은 아티스트의 신곡 정답 4,987개(사용자 4,496명)의 평균 순위 위치입니다. 0.5가 무작위 수준입니다.
 
 | 정답 곡의 평균 순위 위치 | 음향 특징 | 음향 특징 + 태그 |
 |---|---|---|
@@ -268,7 +268,7 @@ S_MF(u, 신곡) = p_u · q_신곡                 사용자의 안 들은 학습
 
 **결론:** 가설은 기각되었습니다. 음악 특징에 무작위보다 나은 신호는 있지만, Top-20에 들 만큼 강하지 않습니다. 이 수치에는 음악 특징이 곡의 인기를 예측한 효과가 섞여 있을 수 있습니다.
 
-### 검증 2. 들어 본 아티스트를 뺀 평가 (`unknown_artist_experiment.py`)
+### 검증 2. 들어 본 아티스트를 뺀 평가 (`experiments/val2_unknown_artist/unknown_artist_experiment.py`)
 
 **가설:** 무작위 분할에서는 같은 아티스트의 곡이 학습과 정답에 함께 들어가 아티스트 정보가 유리하다. 이 효과를 빼면 음악 특징의 능력을 공정하게 볼 수 있다.
 
@@ -330,19 +330,27 @@ n은 검증 NDCG@10으로 고르려 했지만 세 값의 결과가 모두 같아
 
 ## 8. 파일 구성과 실행
 
-| 파일 | 내용 |
-|---|---|
-| `final_model.py` | 최종 모델, 평가, 추천 |
-| `hybrid.py` | 제안서 공식, 평가 지표, 공통 분할 생성 |
-| `scaler_experiment.py` | 실험 2 |
-| `artist_experiment.py` | 실험 3 |
-| `artist_mf_experiment.py` | 실험 4 |
-| `artist_cap_experiment.py` | 실험 5 |
-| `feature_mf_experiment.py`, `feature_signal_diagnostic.py` | 검증 1 |
-| `unknown_artist_experiment.py` | 검증 2 |
-| `make_figures.py` | 결과 그림 |
-| `test_*.py` | 단위 테스트 (실제 데이터 불필요) |
-| `hybrid_output/` | 실험 결과와 그림 |
+```
+├── content_based.py, collaborative.py   1·2단계 코드 (수정 없음)
+├── hybrid.py                            제안서 공식, 공통 평가 코드, 실험 1
+├── final_model.py                       최종 모델, 검증 3
+├── make_figures.py                      결과 그림
+├── test_*.py                            위 파일들의 단위 테스트
+├── hybrid_output/                       실험 결과와 그림
+└── experiments/
+    ├── exp2_scaler/                     실험 2: 스케일러 교체
+    ├── exp3_artist/                     실험 3: 아티스트 선호도 추가
+    ├── exp4_artist_mf/                  실험 4: 아티스트로 신곡의 S_MF 추정
+    ├── exp5_artist_cap/                 실험 5: 아티스트당 곡 수 제한
+    ├── val1_feature_mf/                 검증 1: 음악 특징으로 벡터 예측, 신호 진단
+    └── val2_unknown_artist/             검증 2: 들어 본 아티스트를 뺀 평가
+```
+
+- 각 실험 폴더에는 실험 코드와 그 단위 테스트가 함께 있습니다. 테스트에는 실제 데이터가 필요하지 않습니다.
+- 실험 1은 `hybrid.py` 안에 있습니다. 모든 실험이 이 파일의 공통 코드를 쓰기 때문에 최상위 폴더에 두었습니다.
+- 검증 3은 별도 코드 없이 `final_model.py`를 20% 표본으로 실행합니다.
+
+**실행 방법:** 모든 명령은 저장소 최상위 폴더에서 실행합니다. `experiments/` 안의 코드는 파일 경로가 아니라 모듈 이름으로 실행합니다. 예를 들어 실험 2는 `python -m experiments.exp2_scaler.scaler_experiment`입니다.
 
 ```bash
 pip install -r requirements_hybrid.txt
@@ -356,16 +364,16 @@ python final_model.py recommend --music "Music Info.csv" --train-history shared_
 
 # 실험 재현
 python hybrid.py evaluate --output hybrid_output/rank
-python scaler_experiment.py
-python artist_experiment.py
-python artist_mf_experiment.py
-python artist_mf_experiment.py --betas 0.5 0.9 --gammas 1 2 5 10 --output hybrid_output/artist_mf_gamma
-python artist_cap_experiment.py
+python -m experiments.exp2_scaler.scaler_experiment
+python -m experiments.exp3_artist.artist_experiment
+python -m experiments.exp4_artist_mf.artist_mf_experiment
+python -m experiments.exp4_artist_mf.artist_mf_experiment --betas 0.5 0.9 --gammas 1 2 5 10 --output hybrid_output/artist_mf_gamma
+python -m experiments.exp5_artist_cap.artist_cap_experiment
 
 # 최종 모델 검증
-python feature_mf_experiment.py
-python feature_signal_diagnostic.py
-python unknown_artist_experiment.py
+python -m experiments.val1_feature_mf.feature_mf_experiment
+python -m experiments.val1_feature_mf.feature_signal_diagnostic
+python -m experiments.val2_unknown_artist.unknown_artist_experiment
 python hybrid.py make-split --user-fraction 0.20 --output sample_20pct
 python final_model.py evaluate --train-history sample_20pct/shared_train_history.csv --test-history sample_20pct/shared_test_history.csv --output hybrid_output/final_20pct
 
@@ -373,7 +381,7 @@ python final_model.py evaluate --train-history sample_20pct/shared_train_history
 python make_figures.py
 
 # 테스트
-python -m unittest test_unknown_artist_experiment.py test_feature_mf_experiment.py test_artist_cap_experiment.py test_make_figures.py test_final_model.py test_artist_mf_experiment.py test_artist_experiment.py test_scaler_experiment.py test_hybrid.py test_collaborative.py test_content_based.py
+python -m unittest discover -s . -t . -p "test_*.py"
 ```
 
 

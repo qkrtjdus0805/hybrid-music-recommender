@@ -1,5 +1,5 @@
 """Checks for the artist affinity experiment. No real data needed.
-Run: python -m unittest test_artist_experiment.py -v
+Run: python -m unittest experiments.exp3_artist.test_artist_experiment -v
 """
 import contextlib
 import io
@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 import pandas as pd
 
-from artist_experiment import (ArtistAffinity, ArtistCB, duplicate_share, mock_topk, run_artist_experiment)
+from experiments.exp3_artist.artist_experiment import (ArtistAffinity, ArtistCB, duplicate_share, mock_topk, run_artist_experiment)
 from content_based import AUDIO_FEATURE_COLS, ContentBasedRecommender
 from hybrid import HybridRecommender, mask_mock_cold
 from test_hybrid import make_fixture

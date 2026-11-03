@@ -10,7 +10,7 @@ Popularity and random scores show what chance and "just recommend hits" achieve 
 Each feature set's new-song listener count is chosen on validation by NDCG@10 before TEST is read.
 
 Run:
-  python unknown_artist_experiment.py --music "Music Info.csv" \
+  python -m experiments.val2_unknown_artist.unknown_artist_experiment --music "Music Info.csv" \
       --train-history shared_train_history.csv --test-history shared_test_history.csv
 """
 from __future__ import annotations
@@ -25,11 +25,11 @@ import pandas as pd
 
 from collaborative import CollaborativeRecommender
 from content_based import load_history, split_history_by_user
-from feature_mf_experiment import (FEATURE_SETS, NEW_SONG_LISTENERS, FeatureMF, feature_matrix,
+from experiments.val1_feature_mf.feature_mf_experiment import (FEATURE_SETS, NEW_SONG_LISTENERS, FeatureMF, feature_matrix,
                                    fit_feature_regression)
 from final_model import N_CLUSTERS, ArtistAffinity, _ranked_prefix, paired_bootstrap
 from hybrid import BUCKETS, HybridRecommender, _clean_test, assign_buckets, mask_mock_cold, ranking_metrics
-from scaler_experiment import _CachedMF, make_cb
+from experiments.exp2_scaler.scaler_experiment import _CachedMF, make_cb
 
 BASELINES = (("ndcg10", "MF"), ("ndcg10", "Popularity"), ("recall20", "MF"), ("new_recall20", "CB"))
 

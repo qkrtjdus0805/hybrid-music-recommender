@@ -1,5 +1,5 @@
 """Checks for estimating a new song's MF score from its artist. No real data needed.
-Run: python -m unittest test_artist_mf_experiment.py -v
+Run: python -m unittest experiments.exp4_artist_mf.test_artist_mf_experiment -v
 """
 import contextlib
 import io
@@ -8,13 +8,13 @@ import unittest
 import numpy as np
 import pandas as pd
 
-from artist_experiment import ArtistAffinity, ArtistCB
-from artist_mf_experiment import (BETAS, GAMMAS, ArtistMF, choose_config, paired_bootstrap, parse_args,
+from experiments.exp3_artist.artist_experiment import ArtistAffinity, ArtistCB
+from experiments.exp4_artist_mf.artist_mf_experiment import (BETAS, GAMMAS, ArtistMF, choose_config, paired_bootstrap, parse_args,
                                   per_user_metrics, run_artist_mf_experiment)
 from collaborative import CollaborativeRecommender
 from content_based import ContentBasedRecommender
 from hybrid import HybridRecommender, mask_mock_cold
-from test_artist_experiment import artist_world
+from experiments.exp3_artist.test_artist_experiment import artist_world
 from test_hybrid import make_fixture
 
 SMALL_CF = {"n_factors": 8, "n_epochs": 3}

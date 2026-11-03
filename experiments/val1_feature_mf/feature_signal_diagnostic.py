@@ -4,7 +4,7 @@ For each answer, measures its percentile among mock-cold songs (predicted vector
 whole catalogue (S_Hybrid without the artist term, n=75). 0.5 is chance. Results are not used to choose any setting.
 
 Run:
-  python feature_signal_diagnostic.py
+  python -m experiments.val1_feature_mf.feature_signal_diagnostic
 """
 from __future__ import annotations
 
@@ -15,10 +15,10 @@ import pandas as pd
 
 from collaborative import CollaborativeRecommender
 from content_based import load_history
-from feature_mf_experiment import FEATURE_SETS, FeatureMF, feature_matrix, fit_feature_regression
+from experiments.val1_feature_mf.feature_mf_experiment import FEATURE_SETS, FeatureMF, feature_matrix, fit_feature_regression
 from final_model import ArtistAffinity, ArtistCB, FinalRecommender
 from hybrid import _clean_test, mask_mock_cold
-from scaler_experiment import make_cb
+from experiments.exp2_scaler.scaler_experiment import make_cb
 
 
 def percentile(values: np.ndarray, targets) -> list[float]:

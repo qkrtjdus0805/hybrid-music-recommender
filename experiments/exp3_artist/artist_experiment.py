@@ -7,7 +7,7 @@ The scaler and beta are chosen by new-song Recall@20 on validation (ties: percen
 content_based.py and collaborative.py stay unchanged.
 
 Run:
-  python artist_experiment.py --music "Music Info.csv" \
+  python -m experiments.exp3_artist.artist_experiment --music "Music Info.csv" \
       --train-history shared_train_history.csv --test-history shared_test_history.csv
 """
 from __future__ import annotations
@@ -23,7 +23,7 @@ from collaborative import CollaborativeRecommender
 from content_based import load_history, split_history_by_user
 from final_model import ArtistAffinity, ArtistCB
 from hybrid import _clean_test, _percentile_unseen, mask_mock_cold, normalize_key, top_k_indices
-from scaler_experiment import FIXED_ALPHA, _CachedMF, _test_row, make_cb
+from experiments.exp2_scaler.scaler_experiment import FIXED_ALPHA, _CachedMF, _test_row, make_cb
 
 SCALERS = ("standard", "categorical_onehot", "minmax")
 BETAS = (0.0, 0.1, 0.3, 0.5, 0.7, 0.9)
