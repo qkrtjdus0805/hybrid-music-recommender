@@ -15,7 +15,7 @@ from content_based import ContentBasedRecommender
 from final_model import (FINAL_BETA, FINAL_CAP, FINAL_GAMMA, ArtistAffinity, ArtistCB, ArtistMF, build_final_model,
                          evaluate_final, list_diversity, main)
 from hybrid import HybridRecommender, mask_mock_cold
-from test_hybrid import make_fixture
+from tests.test_hybrid import make_fixture
 
 SMALL_CF = {"n_factors": 8, "n_epochs": 3}
 

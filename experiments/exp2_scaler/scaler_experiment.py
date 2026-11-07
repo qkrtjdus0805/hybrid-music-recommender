@@ -4,8 +4,8 @@ content_based.py stays unchanged: each variant swaps the public `scaler` attribu
 The scaler is chosen on validation data; TEST is only read to report results.
 
 Run:
-  python -m experiments.exp2_scaler.scaler_experiment --music "Music Info.csv" \
-      --train-history shared_train_history.csv --test-history shared_test_history.csv
+  python -m experiments.exp2_scaler.scaler_experiment --music "data/Music Info.csv" \
+      --train-history data/shared_train_history.csv --test-history data/shared_test_history.csv
 """
 from __future__ import annotations
 
@@ -177,12 +177,12 @@ def run_experiment(music: pd.DataFrame, train: pd.DataFrame, test: pd.DataFrame,
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Compare scalers for the Stage 1 audio features")
-    parser.add_argument("--music", default="Music Info.csv")
-    parser.add_argument("--train-history", default="shared_train_history.csv")
-    parser.add_argument("--test-history", default="shared_test_history.csv")
+    parser.add_argument("--music", default="data/Music Info.csv")
+    parser.add_argument("--train-history", default="data/shared_train_history.csv")
+    parser.add_argument("--test-history", default="data/shared_test_history.csv")
     parser.add_argument("--max-users", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--output", default="hybrid_output/scaler")
+    parser.add_argument("--output", default="outputs/hybrid/scaler")
     args = parser.parse_args(argv)
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)

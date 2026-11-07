@@ -225,7 +225,7 @@ class CollaborativeRecommender:
 
 def main() -> None:
     p = argparse.ArgumentParser(description="Stage 2: collaborative filtering")
-    p.add_argument("--music", default="Music Info.csv")
+    p.add_argument("--music", default="data/Music Info.csv")
     p.add_argument("--history", default=None, help="Raw history .csv/.zip; sampled and split 80/20 (demo)")
     p.add_argument("--train-history", default=None, help="Shared TRAIN csv from team")
     p.add_argument("--test-history", default=None, help="Shared TEST csv from team")
@@ -237,7 +237,7 @@ def main() -> None:
     p.add_argument("--lr", type=float, default=0.01, help="sgd only")
     p.add_argument("--user", default=None)
     p.add_argument("--top-n", type=int, default=10)
-    p.add_argument("--output", default="collaborative_output")
+    p.add_argument("--output", default="outputs/collaborative")
     args = p.parse_args()
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)

@@ -10,8 +10,8 @@ Popularity and random scores show what chance and "just recommend hits" achieve 
 Each feature set's new-song listener count is chosen on validation by NDCG@10 before TEST is read.
 
 Run:
-  python -m experiments.val2_unknown_artist.unknown_artist_experiment --music "Music Info.csv" \
-      --train-history shared_train_history.csv --test-history shared_test_history.csv
+  python -m experiments.val2_unknown_artist.unknown_artist_experiment --music "data/Music Info.csv" \
+      --train-history data/shared_train_history.csv --test-history data/shared_test_history.csv
 """
 from __future__ import annotations
 
@@ -172,12 +172,12 @@ def run_unknown_artist_experiment(music: pd.DataFrame, train: pd.DataFrame, test
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Compare models among artists the user has never heard")
-    parser.add_argument("--music", default="Music Info.csv")
-    parser.add_argument("--train-history", default="shared_train_history.csv")
-    parser.add_argument("--test-history", default="shared_test_history.csv")
+    parser.add_argument("--music", default="data/Music Info.csv")
+    parser.add_argument("--train-history", default="data/shared_train_history.csv")
+    parser.add_argument("--test-history", default="data/shared_test_history.csv")
     parser.add_argument("--max-users", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--output", default="hybrid_output/unknown_artist")
+    parser.add_argument("--output", default="outputs/hybrid/unknown_artist")
     args = parser.parse_args(argv)
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)

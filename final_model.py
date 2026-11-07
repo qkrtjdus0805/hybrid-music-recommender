@@ -10,15 +10,15 @@ For a new song by an artist with trained songs:
 Every song competes in one ranking; no slots are reserved. Lists then allow at most 5 songs per artist in a
 Top-10. A song by an artist with no trained songs keeps S_MF = 0 and alpha = 1, so it can only be scored by
 0.1 * S_CB. In practice new songs are found only from artists the user has already heard, and lists still
-concentrate on a few artists (see README_hybrid.md).
+concentrate on a few artists (see docs/stage3_hybrid.md).
 
 beta and gamma were chosen on validation data in artist_mf_experiment.py, the cap in artist_cap_experiment.py.
-README_hybrid.md has the results.
+docs/stage3_hybrid.md has the results.
 
 Run:
-  python final_model.py evaluate --music "Music Info.csv" \
-      --train-history shared_train_history.csv --test-history shared_test_history.csv
-  python final_model.py recommend --music "Music Info.csv" --train-history shared_train_history.csv --user USER_ID
+  python final_model.py evaluate --music "data/Music Info.csv" \
+      --train-history data/shared_train_history.csv --test-history data/shared_test_history.csv
+  python final_model.py recommend --music "data/Music Info.csv" --train-history data/shared_train_history.csv --user USER_ID
 """
 from __future__ import annotations
 
@@ -418,16 +418,16 @@ def _recommend_command(args, music: pd.DataFrame, train: pd.DataFrame, out: Path
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Stage 3 final model")
     shared = argparse.ArgumentParser(add_help=False)
-    shared.add_argument("--music", default="Music Info.csv")
-    shared.add_argument("--train-history", default="shared_train_history.csv")
+    shared.add_argument("--music", default="data/Music Info.csv")
+    shared.add_argument("--train-history", default="data/shared_train_history.csv")
     shared.add_argument("--factors", type=int, default=None)
     shared.add_argument("--epochs", type=int, default=None)
     shared.add_argument("--clusters", type=int, default=N_CLUSTERS)
     shared.add_argument("--seed", type=int, default=42)
-    shared.add_argument("--output", default="hybrid_output/final")
+    shared.add_argument("--output", default="outputs/hybrid/final")
     commands = parser.add_subparsers(dest="command", required=True)
     evaluate = commands.add_parser("evaluate", parents=[shared], help="Measure the model on TEST")
-    evaluate.add_argument("--test-history", default="shared_test_history.csv")
+    evaluate.add_argument("--test-history", default="data/shared_test_history.csv")
     evaluate.add_argument("--mock-cold-fraction", type=float, default=0.10)
     evaluate.add_argument("--max-users", type=int, default=2000)
     evaluate.set_defaults(run=_evaluate_command)

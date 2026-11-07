@@ -10,8 +10,8 @@ Settings are chosen on validation before TEST is read: among settings whose NDCG
 "fixed alpha + artist", take the highest new-song Recall@20. If none qualifies, take the best NDCG@10.
 
 Run:
-  python -m experiments.exp4_artist_mf.artist_mf_experiment --music "Music Info.csv" \
-      --train-history shared_train_history.csv --test-history shared_test_history.csv
+  python -m experiments.exp4_artist_mf.artist_mf_experiment --music "data/Music Info.csv" \
+      --train-history data/shared_train_history.csv --test-history data/shared_test_history.csv
 """
 from __future__ import annotations
 
@@ -154,12 +154,12 @@ def run_artist_mf_experiment(music: pd.DataFrame, train: pd.DataFrame, test: pd.
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Estimate S_MF for new songs from their artist")
-    parser.add_argument("--music", default="Music Info.csv")
-    parser.add_argument("--train-history", default="shared_train_history.csv")
-    parser.add_argument("--test-history", default="shared_test_history.csv")
+    parser.add_argument("--music", default="data/Music Info.csv")
+    parser.add_argument("--train-history", default="data/shared_train_history.csv")
+    parser.add_argument("--test-history", default="data/shared_test_history.csv")
     parser.add_argument("--max-users", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--output", default="hybrid_output/artist_mf")
+    parser.add_argument("--output", default="outputs/hybrid/artist_mf")
     parser.add_argument("--betas", type=float, nargs="+", default=list(BETAS))
     parser.add_argument("--gammas", type=float, nargs="+", default=list(GAMMAS))
     return parser.parse_args(argv)

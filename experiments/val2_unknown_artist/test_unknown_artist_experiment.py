@@ -11,7 +11,7 @@ import pandas as pd
 
 from final_model import paired_bootstrap
 from hybrid import assign_buckets
-from test_hybrid import make_fixture
+from tests.test_hybrid import make_fixture
 from experiments.val2_unknown_artist.unknown_artist_experiment import evaluate_unknown, run_unknown_artist_experiment, unknown_candidates
 
 SMALL_CF = {"n_factors": 8, "n_epochs": 3}

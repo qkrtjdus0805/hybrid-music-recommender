@@ -1,6 +1,6 @@
 """Stage 3 — Weighted Hybrid: S_Hybrid(u, i) = alpha(i) * S_CB(u, i) + (1 - alpha(i)) * S_MF(u, i).
 
-README_hybrid.md describes the experiments and results; final_model.py holds the final model.
+docs/stage3_hybrid.md describes the experiments and results; final_model.py holds the final model.
 Unit tests: test_hybrid.py
 """
 from __future__ import annotations
@@ -538,17 +538,17 @@ def main(argv: list[str] | None = None) -> None:
     commands = parser.add_subparsers(dest="command", required=True)
 
     split = commands.add_parser("make-split", help="Create the shared TRAIN/TEST files")
-    split.add_argument("--music", default="Music Info.csv")
-    split.add_argument("--history", default="User Listening History.csv")
+    split.add_argument("--music", default="data/Music Info.csv")
+    split.add_argument("--history", default="data/User Listening History.csv")
     split.add_argument("--user-fraction", type=float, default=0.05)
     split.add_argument("--seed", type=int, default=42)
-    split.add_argument("--output", default=".")
+    split.add_argument("--output", default="data")
     split.set_defaults(run=_make_split_command)
 
     evaluate = commands.add_parser("evaluate", help="Evaluate and write recommendations")
-    evaluate.add_argument("--music", default="Music Info.csv")
-    evaluate.add_argument("--train-history", default="shared_train_history.csv")
-    evaluate.add_argument("--test-history", default="shared_test_history.csv")
+    evaluate.add_argument("--music", default="data/Music Info.csv")
+    evaluate.add_argument("--train-history", default="data/shared_train_history.csv")
+    evaluate.add_argument("--test-history", default="data/shared_test_history.csv")
     evaluate.add_argument("--mock-cold-fraction", type=float, default=0.10)
     evaluate.add_argument("--spotify", default=None, help="Optional Spotify songs CSV for phase 2")
     evaluate.add_argument("--method", choices=["als", "sgd"], default="als")
@@ -558,7 +558,7 @@ def main(argv: list[str] | None = None) -> None:
     evaluate.add_argument("--user", default=None)
     evaluate.add_argument("--top-n", type=int, default=10)
     evaluate.add_argument("--seed", type=int, default=42)
-    evaluate.add_argument("--output", default="hybrid_output")
+    evaluate.add_argument("--output", default="outputs/hybrid")
     evaluate.set_defaults(run=_evaluate_command)
 
     args = parser.parse_args(argv)

@@ -164,7 +164,7 @@ S_MF(u, 신곡) = 같은 아티스트의 학습 곡 S_MF 평균
 
 **결론:** 쏠림이 크게 줄고 비주류 곡을 찾는 능력이 올랐습니다. 다만 사용자별 Top-10이 평균 2.33명의 아티스트에 몰리는 새로운 문제가 생겼습니다(MF는 6.64명).
 
-![γ에 따른 이력 0인 곡 비율과 NDCG@10](hybrid_output/figures/tradeoff_curve.png)
+![γ에 따른 이력 0인 곡 비율과 NDCG@10](../outputs/hybrid/figures/tradeoff_curve.png)
 
 ### 실험 5. 아티스트당 곡 수 제한 (`experiments/exp5_artist_cap/artist_cap_experiment.py`)
 
@@ -217,13 +217,13 @@ S_Hybrid = α(i) × S_CB' + (1 − α(i)) × S_MF
 | 모의 신곡 Recall@20, 고정 α + 아티스트 (567명) | +0.0570 | +0.0385 ~ +0.0770 |
 | 모의 신곡 Recall@20, 곡 수 제한 전 (567명) | −0.0238 | −0.0415 ~ −0.0079 |
 
-![모델별 정확도와 모의 신곡 Recall](hybrid_output/figures/model_comparison.png)
+![모델별 정확도와 모의 신곡 Recall](../outputs/hybrid/figures/model_comparison.png)
 
-![구간별 Recall@20](hybrid_output/figures/bucket_recall.png)
+![구간별 Recall@20](../outputs/hybrid/figures/bucket_recall.png)
 
-![모델별 Top-10 구성](hybrid_output/figures/top10_composition.png)
+![모델별 Top-10 구성](../outputs/hybrid/figures/top10_composition.png)
 
-수치는 `hybrid_output/figures/figure_data.csv`에도 있습니다.
+수치는 `outputs/hybrid/figures/figure_data.csv`에도 있습니다.
 
 ## 6. 최종 모델 검증
 
@@ -323,7 +323,7 @@ n은 검증 NDCG@10으로 고르려 했지만 세 값의 결과가 모두 같아
 - **결합의 효과:** 곡 수 제한 전 기준으로, 최종 모델의 `S_MF`만 쓰면 NDCG@10(0.1533)과 모의 신곡 Recall@20(0.1024)이 더 높습니다. 결합의 이득은 주로 청취자가 적은 기존 곡을 찾는 데서 나옵니다(1~4명 곡 Recall@20 0.1215 대 0.0104).
 - **평가의 독립성:** 설정 값은 검증 데이터로 골랐지만, 연속된 실험에서 테스트 결과를 보며 다음 방향을 정했으므로 최종 수치가 완전히 독립적인 평가는 아닙니다. 선택 기준도 두 차례 충족하지 못했습니다.
 - **신뢰구간의 범위:** 사용자 표본의 불확실성만 반영합니다. 모의 신곡 목록과 ALS 시드는 하나로 고정했습니다.
-- **두 번째 데이터셋:** 이 문서의 결과는 MSD 기반 데이터 하나에서 얻은 것입니다. Spotify 평가는 실제 데이터로 실행하지 않았습니다. `hybrid.py --spotify`는 합성 데이터로만 테스트했고, 최종 모델이 아니라 제안서 공식을 평가합니다.
+- **두 번째 데이터셋:** 이 문서 본문의 결과는 MSD 기반 데이터 하나에서 얻은 것입니다(최종 모델에 대한 실제 `spotify_songs.csv` 80/20 플레이리스트 외부 검증 결과는 별도 문서 [`docs/val3_spotify_80_20.md`](val3_spotify_80_20.md)에 정리되어 있습니다). `hybrid.py --spotify`는 제안서 공식을 평가합니다.
 - **제안서와의 차이:** 제안서는 Librosa 특징과 SGD 학습을 명시하지만, 코드는 사전 계산된 음향 특징과 ALS 기본값을 씁니다. K-Means 군집은 추천 점수에 쓰이지 않습니다.
 
 **개선 방향:** 들어 보지 않은 아티스트의 신곡을 찾으려면 지금의 음향 특징과 태그보다 강한 곡 정보가 필요합니다. 또한 새로운 곡을 발견해 주는 능력을 제대로 재려면 재생 기록이 아닌 평가(실제 사용자 반응 등)가 필요합니다.
@@ -335,15 +335,20 @@ n은 검증 NDCG@10으로 고르려 했지만 세 값의 결과가 모두 같아
 ├── hybrid.py                            제안서 공식, 공통 평가 코드, 실험 1
 ├── final_model.py                       최종 모델, 검증 3
 ├── make_figures.py                      결과 그림
-├── test_*.py                            위 파일들의 단위 테스트
-├── hybrid_output/                       실험 결과와 그림
+├── data/                                원본 데이터셋 및 사례 연구 입력 데이터
+├── docs/                                단계별·검증별 기술 문서
+├── outputs/hybrid/                      실험 결과 JSON/CSV와 그림
+├── scripts/                             보조 데이터 생성 스크립트
+├── tests/                               최상위 모듈 단위 테스트 (test_*.py)
 └── experiments/
     ├── exp2_scaler/                     실험 2: 스케일러 교체
     ├── exp3_artist/                     실험 3: 아티스트 선호도 추가
     ├── exp4_artist_mf/                  실험 4: 아티스트로 신곡의 S_MF 추정
     ├── exp5_artist_cap/                 실험 5: 아티스트당 곡 수 제한
     ├── val1_feature_mf/                 검증 1: 음악 특징으로 벡터 예측, 신호 진단
-    └── val2_unknown_artist/             검증 2: 들어 본 아티스트를 뺀 평가
+    ├── val2_unknown_artist/             검증 2: 들어 본 아티스트를 뺀 평가
+    ├── val3_spotify_80_20/              외부 검증: Spotify 플레이리스트 80/20 평가
+    └── case_study/                      사례 연구: 최종 모델 vs. Spotify vs. Tidal
 ```
 
 - 각 실험 폴더에는 실험 코드와 그 단위 테스트가 함께 있습니다. 테스트에는 실제 데이터가 필요하지 않습니다.
@@ -353,21 +358,21 @@ n은 검증 NDCG@10으로 고르려 했지만 세 값의 결과가 모두 같아
 **실행 방법:** 모든 명령은 저장소 최상위 폴더에서 실행합니다. `experiments/` 안의 코드는 파일 경로가 아니라 모듈 이름으로 실행합니다. 예를 들어 실험 2는 `python -m experiments.exp2_scaler.scaler_experiment`입니다.
 
 ```bash
-pip install -r requirements_hybrid.txt
+pip install -r requirements.txt
 
-# 공통 분할 생성 (필요한 파일: Music Info.csv, User Listening History.csv)
-python hybrid.py make-split --music "Music Info.csv" --history "User Listening History.csv" --user-fraction 0.05
+# 공통 분할 생성 (필요한 파일: data/Music Info.csv, data/User Listening History.csv)
+python hybrid.py make-split --music "data/Music Info.csv" --history "data/User Listening History.csv" --user-fraction 0.05
 
 # 최종 모델 평가와 추천
-python final_model.py evaluate --music "Music Info.csv" --train-history shared_train_history.csv --test-history shared_test_history.csv
-python final_model.py recommend --music "Music Info.csv" --train-history shared_train_history.csv --user USER_ID --top-n 10
+python final_model.py evaluate --music "data/Music Info.csv" --train-history data/shared_train_history.csv --test-history data/shared_test_history.csv
+python final_model.py recommend --music "data/Music Info.csv" --train-history data/shared_train_history.csv --user USER_ID --top-n 10
 
 # 실험 재현
-python hybrid.py evaluate --output hybrid_output/rank
+python hybrid.py evaluate --output outputs/hybrid/rank
 python -m experiments.exp2_scaler.scaler_experiment
 python -m experiments.exp3_artist.artist_experiment
 python -m experiments.exp4_artist_mf.artist_mf_experiment
-python -m experiments.exp4_artist_mf.artist_mf_experiment --betas 0.5 0.9 --gammas 1 2 5 10 --output hybrid_output/artist_mf_gamma
+python -m experiments.exp4_artist_mf.artist_mf_experiment --betas 0.5 0.9 --gammas 1 2 5 10 --output outputs/hybrid/artist_mf_gamma
 python -m experiments.exp5_artist_cap.artist_cap_experiment
 
 # 최종 모델 검증
@@ -375,7 +380,7 @@ python -m experiments.val1_feature_mf.feature_mf_experiment
 python -m experiments.val1_feature_mf.feature_signal_diagnostic
 python -m experiments.val2_unknown_artist.unknown_artist_experiment
 python hybrid.py make-split --user-fraction 0.20 --output sample_20pct
-python final_model.py evaluate --train-history sample_20pct/shared_train_history.csv --test-history sample_20pct/shared_test_history.csv --output hybrid_output/final_20pct
+python final_model.py evaluate --train-history sample_20pct/shared_train_history.csv --test-history sample_20pct/shared_test_history.csv --output outputs/hybrid/final_20pct
 
 # 그림
 python make_figures.py

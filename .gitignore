@@ -9,36 +9,39 @@ __pycache__/
 # macOS
 .DS_Store
 
-# Original datasets
-Music Info.csv
-User Listening History.csv
-User Listening History.csv.zip
-spotify_songs.csv
+# Original datasets (place them in data/, see README)
+data/Music Info.csv
+data/User Listening History.csv
+data/User Listening History.csv.zip
+data/spotify_songs.csv
+data/spotify_songs.csv.zip
+data/shared_*_history.csv
 
 # Secret environment files
 .env
 
 # Generated outputs
-collaborative_output/
+outputs/collaborative/
 
 # Backup files
 *.bak
 
 
-# Stage 3 hybrid outputs and shared splits
-hybrid_output/*
-!hybrid_output/figures/
-!hybrid_output/final/
-!hybrid_output/rank/
-!hybrid_output/scaler/
-!hybrid_output/artist/
-!hybrid_output/artist_mf/
-!hybrid_output/artist_mf_gamma/
-!hybrid_output/artist_cap/
-!hybrid_output/feature_mf/
-!hybrid_output/unknown_artist/
-!hybrid_output/final_20pct/
-shared_*_history.csv
+# Stage 3 hybrid outputs
+outputs/hybrid/*
+!outputs/hybrid/figures/
+!outputs/hybrid/final/
+!outputs/hybrid/rank/
+!outputs/hybrid/scaler/
+!outputs/hybrid/artist/
+!outputs/hybrid/artist_mf/
+!outputs/hybrid/artist_mf_gamma/
+!outputs/hybrid/artist_cap/
+!outputs/hybrid/feature_mf/
+!outputs/hybrid/unknown_artist/
+!outputs/hybrid/final_20pct/
+!outputs/hybrid/spotify_80_20/
+!outputs/hybrid/case_study/
 
 # Audio samples (not used by the models)
 MP3-Example/

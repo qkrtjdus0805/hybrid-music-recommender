@@ -1,6 +1,6 @@
 """Draw the report figures from saved experiment results. Nothing is retrained.
 
-Run: python make_figures.py --results hybrid_output --output hybrid_output/figures
+Run: python make_figures.py --results outputs/hybrid --output outputs/hybrid/figures
 """
 from __future__ import annotations
 
@@ -201,8 +201,8 @@ def _write_table(table: dict, points: list[dict], out: Path) -> None:
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Draw the report figures")
-    parser.add_argument("--results", default="hybrid_output")
-    parser.add_argument("--output", default="hybrid_output/figures")
+    parser.add_argument("--results", default="outputs/hybrid")
+    parser.add_argument("--output", default="outputs/hybrid/figures")
     args = parser.parse_args(argv)
     root, out = Path(args.results), Path(args.output)
     out.mkdir(parents=True, exist_ok=True)

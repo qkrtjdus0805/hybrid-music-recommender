@@ -10,7 +10,7 @@ import numpy as np
 from experiments.exp5_artist_cap.artist_cap_experiment import cap_top_k, choose_cap, evaluate_capped, run_cap_experiment
 from final_model import _ranked_prefix, build_final_model
 from hybrid import evaluate_hybrid, mask_mock_cold, top_k_indices
-from test_hybrid import make_fixture
+from tests.test_hybrid import make_fixture
 
 SMALL_CF = {"n_factors": 8, "n_epochs": 3}
 IDS = np.array(["a", "b", "c", "d", "e"])

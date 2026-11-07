@@ -27,10 +27,10 @@ def percentile(values: np.ndarray, targets) -> list[float]:
 
 
 def main() -> None:
-    music = pd.read_csv("Music Info.csv", encoding="utf-8-sig", dtype={"track_id": str})
+    music = pd.read_csv("data/Music Info.csv", encoding="utf-8-sig", dtype={"track_id": str})
     valid = set(music["track_id"].dropna())
-    train = load_history("shared_train_history.csv", valid, user_fraction=1.0)
-    test = load_history("shared_test_history.csv", valid, user_fraction=1.0)
+    train = load_history("data/shared_train_history.csv", valid, user_fraction=1.0)
+    test = load_history("data/shared_test_history.csv", valid, user_fraction=1.0)
     masked, cold = mask_mock_cold(train, 0.10, 42)
     cf = CollaborativeRecommender(method="als", random_state=42).fit(masked, music)
     cb = make_cb("standard", music, 42, 6)
@@ -77,7 +77,7 @@ def main() -> None:
                       "share_users_in_top20": float(np.mean(np.array(best_rank) <= 20)),
                       "share_users_in_top200": float(np.mean(np.array(best_rank) <= 200))}
         print(name, rows[name], flush=True)
-    out = Path("hybrid_output/feature_mf")
+    out = Path("outputs/hybrid/feature_mf")
     out.mkdir(parents=True, exist_ok=True)
     table = pd.DataFrame(rows)
     table.to_csv(out / "signal_diagnostic.csv")

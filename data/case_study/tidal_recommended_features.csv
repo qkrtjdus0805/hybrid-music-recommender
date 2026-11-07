@@ -1,0 +1,11 @@
+﻿rank,query,track_id,name,artist,danceability,energy,key,loudness,mode,speechiness,acousticness,instrumentalness,liveness,valence,tempo,time_signature,duration_ms,source
+1,forever young,TRRGMZX128F4252CF9,Forever Young,Alphaville,0.486,0.503,9,-8.412,0,0.0298,0.649,0.000587,0.395,0.285,136.636,4,223413,Music Info.csv
+2,mamma mia,TRYJYID128F42B79A9,Mamma Mia,ABBA,0.749,0.754,2,-6.986,1,0.0327,0.262,0.000269,0.441,0.809,137.538,4,212426,Music Info.csv
+3,total eclipse of the heart,5prTs2HAw2G4idHZyeFp8o,Total Eclipse of the Heart,Bonnie Tyler,0.435,0.658,8,-8.179,1,0.0661,0.195,0.0,0.102,0.184,130.276,,269787,spotify_songs.csv
+4,i got you,3UCsoEI6l71mhwaiNM8DOD,I Got You,Split Enz,0.679,0.43,2,-13.895,1,0.0367,0.0633,7.9e-05,0.122,0.83,125.705,,211000,spotify_songs.csv
+5,let's dance,TRADAUB128F425AD69,Let's Dance,David Bowie,0.64,0.714,8,-8.83,1,0.0377,0.00276,0.00751,0.249,0.763,114.533,4,236293,Music Info.csv
+6,born in usa,0dOg1ySSI7NkpAe89Zo0b9,Born in the U.S.A.,Bruce Springsteen,0.398,0.952,4,-6.042,1,0.061,0.000373,7.75e-05,0.1,0.584,122.093,,278680,spotify_songs.csv
+7,i want you back,TRLLPDJ128F931FE4A,I Want You Back,The Jackson 5,0.67,0.584,8,-8.325,1,0.034,0.439,0.00614,0.178,0.944,98.185,4,179226,Music Info.csv
+8,uptown funk,32OlwWuMpZ6b0aN2RZOeMS,Uptown Funk,Mark Ronson,0.856,0.609,0,-7.223,1,0.0824,0.00801,8.15e-05,0.0344,0.928,114.988,,269667,spotify_songs.csv
+9,i love rock'N roll,TRWIDTU12903CC474B,I Love Rock 'n' Roll,Joan Jett and the Blackhearts,0.539,0.724,4,-5.417,1,0.0498,0.29,0.0,0.784,0.869,94.697,4,175493,Music Info.csv
+10,living on a prayer,37ZJ0p5Jm13JPevGcx4SkF,Livin' On A Prayer,Bon Jovi,0.532,0.887,0,-3.757,1,0.0335,0.0778,0.000214,0.294,0.795,122.511,,249293,spotify_songs.csv

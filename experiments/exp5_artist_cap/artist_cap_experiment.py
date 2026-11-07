@@ -7,8 +7,8 @@ The cap is chosen on validation before TEST is read: the tightest cap whose NDCG
 are both at least 90% of the uncapped list. If none qualifies, the list stays uncapped.
 
 Run:
-  python -m experiments.exp5_artist_cap.artist_cap_experiment --music "Music Info.csv" \
-      --train-history shared_train_history.csv --test-history shared_test_history.csv
+  python -m experiments.exp5_artist_cap.artist_cap_experiment --music "data/Music Info.csv" \
+      --train-history data/shared_train_history.csv --test-history data/shared_test_history.csv
 """
 from __future__ import annotations
 
@@ -65,12 +65,12 @@ def run_cap_experiment(music: pd.DataFrame, train: pd.DataFrame, test: pd.DataFr
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Limit songs per artist in the final model's lists")
-    parser.add_argument("--music", default="Music Info.csv")
-    parser.add_argument("--train-history", default="shared_train_history.csv")
-    parser.add_argument("--test-history", default="shared_test_history.csv")
+    parser.add_argument("--music", default="data/Music Info.csv")
+    parser.add_argument("--train-history", default="data/shared_train_history.csv")
+    parser.add_argument("--test-history", default="data/shared_test_history.csv")
     parser.add_argument("--max-users", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--output", default="hybrid_output/artist_cap")
+    parser.add_argument("--output", default="outputs/hybrid/artist_cap")
     args = parser.parse_args(argv)
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)

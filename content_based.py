@@ -299,7 +299,7 @@ class ContentBasedRecommender:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Stage 1: music content-based model")
-    parser.add_argument("--music", default="Music Info.csv")
+    parser.add_argument("--music", default="data/Music Info.csv")
     parser.add_argument("--history", default=None, help="History .csv or .zip, for a demo")
     parser.add_argument("--train-history", default=None, help="Shared TRAIN history CSV from team; takes priority")
     parser.add_argument("--user-fraction", type=float, default=0.005,
@@ -308,7 +308,7 @@ def main() -> None:
     parser.add_argument("--user", default=None, help="Optional known user ID")
     parser.add_argument("--top-n", type=int, default=10)
     parser.add_argument("--compare-k", action="store_true", help="Compare K=4,6,8,10 for report")
-    parser.add_argument("--output", default="content_based_output")
+    parser.add_argument("--output", default="outputs/content_based")
     args = parser.parse_args()
 
     music = pd.read_csv(args.music, encoding="utf-8-sig", dtype={"track_id": str})

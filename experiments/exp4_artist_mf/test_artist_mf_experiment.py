@@ -15,7 +15,7 @@ from collaborative import CollaborativeRecommender
 from content_based import ContentBasedRecommender
 from hybrid import HybridRecommender, mask_mock_cold
 from experiments.exp3_artist.test_artist_experiment import artist_world
-from test_hybrid import make_fixture
+from tests.test_hybrid import make_fixture
 
 SMALL_CF = {"n_factors": 8, "n_epochs": 3}
 

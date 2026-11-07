@@ -7,8 +7,8 @@ The scaler and beta are chosen by new-song Recall@20 on validation (ties: percen
 content_based.py and collaborative.py stay unchanged.
 
 Run:
-  python -m experiments.exp3_artist.artist_experiment --music "Music Info.csv" \
-      --train-history shared_train_history.csv --test-history shared_test_history.csv
+  python -m experiments.exp3_artist.artist_experiment --music "data/Music Info.csv" \
+      --train-history data/shared_train_history.csv --test-history data/shared_test_history.csv
 """
 from __future__ import annotations
 
@@ -130,12 +130,12 @@ def run_artist_experiment(music: pd.DataFrame, train: pd.DataFrame, test: pd.Dat
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Add artist preference to the Stage 1 score")
-    parser.add_argument("--music", default="Music Info.csv")
-    parser.add_argument("--train-history", default="shared_train_history.csv")
-    parser.add_argument("--test-history", default="shared_test_history.csv")
+    parser.add_argument("--music", default="data/Music Info.csv")
+    parser.add_argument("--train-history", default="data/shared_train_history.csv")
+    parser.add_argument("--test-history", default="data/shared_test_history.csv")
     parser.add_argument("--max-users", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--output", default="hybrid_output/artist")
+    parser.add_argument("--output", default="outputs/hybrid/artist")
     args = parser.parse_args(argv)
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)

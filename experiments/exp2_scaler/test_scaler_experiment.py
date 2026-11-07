@@ -11,7 +11,7 @@ import pandas as pd
 from content_based import AUDIO_FEATURE_COLS, ContentBasedRecommender
 from hybrid import mask_mock_cold
 from experiments.exp2_scaler.scaler_experiment import SCALERS, build_scaler, cold_diagnostics, make_cb, run_experiment
-from test_hybrid import make_fixture
+from tests.test_hybrid import make_fixture
 
 SMALL_CF = {"n_factors": 8, "n_epochs": 3}
 

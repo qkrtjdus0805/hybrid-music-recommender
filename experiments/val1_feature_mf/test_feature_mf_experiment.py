@@ -14,7 +14,7 @@ from experiments.val1_feature_mf.feature_mf_experiment import (FeatureMF, choose
                                    run_feature_mf_experiment)
 from final_model import ArtistAffinity, ArtistCB, FinalRecommender
 from hybrid import mask_mock_cold
-from test_hybrid import make_fixture
+from tests.test_hybrid import make_fixture
 
 SMALL_CF = {"n_factors": 8, "n_epochs": 3}
 

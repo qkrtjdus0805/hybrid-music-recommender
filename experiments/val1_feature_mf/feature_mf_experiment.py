@@ -12,8 +12,8 @@ Each feature set's setting is chosen on validation before TEST is read: among se
 If none qualifies, the current final model stays; the best setting is still reported for reference.
 
 Run:
-  python -m experiments.val1_feature_mf.feature_mf_experiment --music "Music Info.csv" \
-      --train-history shared_train_history.csv --test-history shared_test_history.csv
+  python -m experiments.val1_feature_mf.feature_mf_experiment --music "data/Music Info.csv" \
+      --train-history data/shared_train_history.csv --test-history data/shared_test_history.csv
 """
 from __future__ import annotations
 
@@ -187,12 +187,12 @@ def run_feature_mf_experiment(music: pd.DataFrame, train: pd.DataFrame, test: pd
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Predict new songs' MF vectors from music features")
-    parser.add_argument("--music", default="Music Info.csv")
-    parser.add_argument("--train-history", default="shared_train_history.csv")
-    parser.add_argument("--test-history", default="shared_test_history.csv")
+    parser.add_argument("--music", default="data/Music Info.csv")
+    parser.add_argument("--train-history", default="data/shared_train_history.csv")
+    parser.add_argument("--test-history", default="data/shared_test_history.csv")
     parser.add_argument("--max-users", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--output", default="hybrid_output/feature_mf")
+    parser.add_argument("--output", default="outputs/hybrid/feature_mf")
     args = parser.parse_args(argv)
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)

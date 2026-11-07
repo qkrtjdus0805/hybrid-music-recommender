@@ -1,6 +1,6 @@
 # 2단계 Collaborative Filtering — 실행 안내
 
-`collaborative.py`(모델/학습/평가)와 `test_collaborative.py`(간단한 단위 테스트)로 구성됩니다. 데이터 로딩과 train/test 분할은 1단계 `content_based.py`의 함수를 그대로 사용하므로 두 모델의 분할이 동일합니다.
+`collaborative.py`(모델/학습/평가)와 `tests/test_collaborative.py`(간단한 단위 테스트)로 구성됩니다. 데이터 로딩과 train/test 분할은 1단계 `content_based.py`의 함수를 그대로 사용하므로 두 모델의 분할이 동일합니다.
 
 ## 구현 범위
 
@@ -11,29 +11,29 @@
 
 ## 준비
 
-`pip install -r requirements_collaborative.txt` (`numba`는 선택, SGD 속도 향상용)
+`pip install -r requirements.txt` (`numba`는 선택, SGD 속도 향상용)
 
 ## 실행
 
 ```bash
 # 데모: 원본 이력에서 0.5% 사용자 추출 + 80/20 분할 후 학습/평가
-python collaborative.py --music "Music Info.csv" --history "User Listening History.csv.zip"
+python collaborative.py --music "data/Music Info.csv" --history "data/User Listening History.csv.zip"
 
 # 팀 공통 분할 사용 (권장)
-python collaborative.py --music "Music Info.csv" --train-history shared_train_history.csv --test-history shared_test_history.csv
+python collaborative.py --music "data/Music Info.csv" --train-history data/shared_train_history.csv --test-history data/shared_test_history.csv
 
 # SGD(Biased SVD)로 실행
-python collaborative.py --music "Music Info.csv" --history "User Listening History.csv.zip" --method sgd
+python collaborative.py --music "data/Music Info.csv" --history "data/User Listening History.csv.zip" --method sgd
 ```
 
 주요 옵션: `--method {als,sgd}`(기본 als), `--factors 32`, `--epochs 20`, `--reg 0.05`, `--lr 0.015`(sgd), `--user`, `--top-n`.
 
-`collaborative_output/`에 `cf_evaluation_metrics.json`(테스트 이력 지정 시), `personalized_top10_cf.csv`가 생성됩니다.
+`outputs/collaborative/`에 `cf_evaluation_metrics.json`(테스트 이력 지정 시), `personalized_top10_cf.csv`가 생성됩니다.
 
 ## 테스트
 
 ```bash
-python -m unittest test_collaborative.py -v
+python -m unittest tests/test_collaborative.py -v
 ```
 
 ## 3번 Hybrid 담당자에게 제공할 API
@@ -42,8 +42,8 @@ python -m unittest test_collaborative.py -v
 from collaborative import CollaborativeRecommender
 import pandas as pd
 
-music = pd.read_csv("Music Info.csv", dtype={"track_id": str})
-train = pd.read_csv("shared_train_history.csv")
+music = pd.read_csv("data/Music Info.csv", dtype={"track_id": str})
+train = pd.read_csv("data/shared_train_history.csv")
 cf = CollaborativeRecommender().fit(train, music)        # method="als"가 기본
 
 ids = music["track_id"].tolist()

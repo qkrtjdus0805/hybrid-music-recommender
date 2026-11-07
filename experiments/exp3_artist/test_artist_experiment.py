@@ -11,7 +11,7 @@ import pandas as pd
 from experiments.exp3_artist.artist_experiment import (ArtistAffinity, ArtistCB, duplicate_share, mock_topk, run_artist_experiment)
 from content_based import AUDIO_FEATURE_COLS, ContentBasedRecommender
 from hybrid import HybridRecommender, mask_mock_cold
-from test_hybrid import make_fixture
+from tests.test_hybrid import make_fixture
 
 SMALL_CF = {"n_factors": 8, "n_epochs": 3}
 
