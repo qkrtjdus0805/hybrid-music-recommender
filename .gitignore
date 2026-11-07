@@ -20,9 +20,6 @@ data/shared_*_history.csv
 # Secret environment files
 .env
 
-# Generated outputs
-outputs/collaborative/
-
 # Backup files
 *.bak
 
